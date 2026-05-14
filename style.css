@@ -1,0 +1,654 @@
+/* ─── CSS VARIABLES (Parrot OS Cyber Theme) ─── */
+:root {
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #111111;
+    --bg-glass: rgba(17, 17, 17, 0.75);
+    --bg-glass-light: rgba(255, 255, 255, 0.08);
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --accent-green: #00ff41;
+    --accent-cyan: #00d4ff;
+    --accent-purple: #b829dd;
+    --border-glow: rgba(0, 255, 65, 0.3);
+    --shadow-glow: 0 0 20px rgba(0, 255, 65, 0.15);
+    --font-display: 'Orbitron', sans-serif;
+    --font-mono: 'Share Tech Mono', monospace;
+    --font-body: 'Rajdhani', sans-serif;
+    --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Light Theme Variables */
+body.light-theme {
+    --bg-primary: #f0f2f5;
+    --bg-secondary: #ffffff;
+    --bg-glass: rgba(255, 255, 255, 0.85);
+    --bg-glass-light: rgba(0, 0, 0, 0.05);
+    --text-primary: #1a1a1a;
+    --text-secondary: #555555;
+    --accent-green: #008f11;
+    --accent-cyan: #0077b6;
+    --accent-purple: #7b2cbf;
+    --border-glow: rgba(0, 143, 17, 0.3);
+    --shadow-glow: 0 0 20px rgba(0, 143, 17, 0.15);
+}
+
+/* ─── RESET & BASE ─── */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    transition: var(--transition);
+    position: relative;
+    line-height: 1.6;
+}
+
+/* ─── ANIMATED CYBER BACKGROUND ─── */
+#cyber-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+body.light-theme #cyber-canvas {
+    opacity: 0.3;
+}
+
+/* ─── SCANLINE OVERLAY ─── */
+.scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 255, 65, 0.03) 2px,
+        rgba(0, 255, 65, 0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 1;
+    animation: scanlineMove 8s linear infinite;
+}
+
+body.light-theme .scanlines {
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.02) 2px,
+        rgba(0, 0, 0, 0.02) 4px
+    );
+}
+
+@keyframes scanlineMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100px; }
+}
+
+/* ─── GLITCH TEXT EFFECT ─── */
+.glitch {
+    position: relative;
+    display: inline-block;
+}
+
+.glitch::before,
+.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+}
+
+.glitch::before {
+    color: var(--accent-cyan);
+    animation: glitch-1 2s infinite linear alternate-reverse;
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+}
+
+.glitch::after {
+    color: var(--accent-green);
+    animation: glitch-2 3s infinite linear alternate-reverse;
+    clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+}
+
+@keyframes glitch-1 {
+    0%, 100% { transform: translate(0); }
+    20% { transform: translate(-3px, 3px); }
+    40% { transform: translate(-3px, -3px); }
+    60% { transform: translate(3px, 3px); }
+    80% { transform: translate(3px, -3px); }
+}
+
+@keyframes glitch-2 {
+    0%, 100% { transform: translate(0); }
+    20% { transform: translate(3px, -3px); }
+    40% { transform: translate(3px, 3px); }
+    60% { transform: translate(-3px, -3px); }
+    80% { transform: translate(-3px, 3px); }
+}
+
+/* ─── FLOATING PARTICLES ─── */
+.particle {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    background: var(--accent-green);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.6;
+    animation: floatParticle 15s infinite ease-in-out;
+    box-shadow: 0 0 6px var(--accent-green);
+}
+
+@keyframes floatParticle {
+    0%, 100% { transform: translateY(100vh) scale(0); opacity: 0; }
+    10% { opacity: 0.6; }
+    50% { transform: translateY(-10vh) scale(1); }
+    90% { opacity: 0.6; }
+}
+
+/* ─── THEME TOGGLE BUTTON ─── */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glow);
+    border-radius: 50px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--accent-green);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition);
+    box-shadow: var(--shadow-glow);
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px var(--border-glow);
+    border-color: var(--accent-green);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
+}
+
+.theme-toggle svg {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.5s ease;
+}
+
+body.light-theme .theme-toggle svg {
+    transform: rotate(180deg);
+}
+
+/* ─── MAIN CONTAINER ─── */
+.app-container {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* ─── HEADER ─── */
+.header {
+    text-align: center;
+    padding: 60px 20px 30px;
+    position: relative;
+}
+
+.header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg-glass-light);
+    border: 1px solid var(--border-glow);
+    border-radius: 50px;
+    padding: 8px 20px;
+    margin-bottom: 25px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent-green);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 5px var(--border-glow); }
+    50% { box-shadow: 0 0 20px var(--border-glow), 0 0 40px var(--border-glow); }
+}
+
+.header-badge .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent-green);
+    border-radius: 50%;
+    animation: blink 1s step-end infinite;
+    box-shadow: 0 0 8px var(--accent-green);
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.header h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+.header h1 .highlight {
+    color: var(--accent-green);
+    text-shadow: 0 0 20px var(--border-glow);
+}
+
+.header .subtitle {
+    font-family: var(--font-mono);
+    font-size: clamp(0.75rem, 2vw, 1rem);
+    color: var(--text-secondary);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.header .divider {
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
+    margin: 0 auto;
+    position: relative;
+}
+
+.header .divider::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 8px;
+    background: var(--accent-green);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--accent-green);
+}
+
+/* ─── SPOTIFY SECTION (FULL SCREEN FOCUS) ─── */
+.spotify-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.spotify-card {
+    width: 100%;
+    background: var(--bg-glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border-glow);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        0 0 60px rgba(0, 255, 65, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.spotify-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
+    animation: scanLine 3s linear infinite;
+}
+
+@keyframes scanLine {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.spotify-card:hover {
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        0 0 80px rgba(0, 255, 65, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border-color: rgba(0, 255, 65, 0.5);
+}
+
+.spotify-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent-green);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.spotify-label::before {
+    content: '▶';
+    font-size: 0.6rem;
+    animation: blink 1s step-end infinite;
+}
+
+.spotify-frame-container {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    background: #000;
+}
+
+.spotify-frame-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    box-shadow: inset 0 0 20px rgba(0, 255, 65, 0.1);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.spotify-frame {
+    width: 100%;
+    border: none;
+    display: block;
+    min-height: 500px;
+    height: 60vh;
+    height: 60dvh;
+}
+
+/* ─── FOOTER ─── */
+.footer {
+    text-align: center;
+    padding: 30px 20px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    letter-spacing: 2px;
+}
+
+.footer .heart {
+    color: var(--accent-green);
+    animation: heartbeat 1.5s ease-in-out infinite;
+    display: inline-block;
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-green);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-cyan);
+}
+
+/* ─── RESPONSIVE DESIGN ─── */
+
+/* Large PCs & Curved Displays */
+@media (min-width: 1920px) {
+    .app-container {
+        padding: 0 10%;
+    }
+    .spotify-frame {
+        height: 65vh;
+        min-height: 600px;
+    }
+}
+
+/* Standard Desktop */
+@media (min-width: 1200px) and (max-width: 1919px) {
+    .spotify-frame {
+        height: 60vh;
+        min-height: 500px;
+    }
+}
+
+/* Tablets (Landscape) */
+@media (min-width: 1024px) and (max-width: 1199px) {
+    .header {
+        padding: 50px 20px 25px;
+    }
+    .spotify-frame {
+        height: 55vh;
+        min-height: 450px;
+    }
+}
+
+/* Tablets (Portrait) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .header h1 {
+        font-size: 2.2rem;
+    }
+    .spotify-card {
+        padding: 20px;
+    }
+    .spotify-frame {
+        height: 50vh;
+        min-height: 400px;
+    }
+}
+
+/* Large Phones */
+@media (min-width: 481px) and (max-width: 767px) {
+    .theme-toggle {
+        top: 15px;
+        right: 15px;
+        padding: 8px 15px;
+        font-size: 0.75rem;
+    }
+    .header {
+        padding: 55px 15px 20px;
+    }
+    .header h1 {
+        font-size: 1.6rem;
+        letter-spacing: 2px;
+    }
+    .spotify-card {
+        padding: 15px;
+        border-radius: 15px;
+    }
+    .spotify-frame {
+        height: 55vh;
+        min-height: 350px;
+    }
+}
+
+/* Small Phones */
+@media (max-width: 480px) {
+    .theme-toggle {
+        top: 10px;
+        right: 10px;
+        padding: 6px 12px;
+        font-size: 0.7rem;
+        gap: 5px;
+    }
+    .theme-toggle svg {
+        width: 14px;
+        height: 14px;
+    }
+    .header {
+        padding: 50px 10px 15px;
+    }
+    .header-badge {
+        font-size: 0.65rem;
+        padding: 6px 12px;
+        letter-spacing: 1px;
+    }
+    .header h1 {
+        font-size: 1.3rem;
+        letter-spacing: 1px;
+    }
+    .header .subtitle {
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+    }
+    .spotify-section {
+        padding: 10px;
+    }
+    .spotify-card {
+        padding: 12px;
+        border-radius: 12px;
+    }
+    .spotify-label {
+        font-size: 0.65rem;
+        margin-bottom: 10px;
+    }
+    .spotify-frame {
+        height: 50vh;
+        min-height: 300px;
+    }
+    .footer {
+        padding: 20px 10px;
+        font-size: 0.65rem;
+    }
+}
+
+/* Wear OS / Very Small Watches */
+@media (max-width: 320px), (max-height: 320px) {
+    .theme-toggle {
+        display: none;
+    }
+    .header {
+        padding: 30px 5px 10px;
+    }
+    .header-badge {
+        display: none;
+    }
+    .header h1 {
+        font-size: 0.9rem;
+    }
+    .header .subtitle {
+        font-size: 0.55rem;
+    }
+    .spotify-card {
+        padding: 8px;
+    }
+    .spotify-label {
+        font-size: 0.55rem;
+    }
+    .spotify-frame {
+        height: 45vh;
+        min-height: 200px;
+    }
+}
+
+/* Landscape Mode on Phones */
+@media (max-height: 500px) and (orientation: landscape) {
+    .header {
+        padding: 45px 15px 10px;
+    }
+    .header h1 {
+        font-size: 1.4rem;
+    }
+    .spotify-frame {
+        height: 70vh;
+        min-height: 250px;
+    }
+}
+
+/* Curved Display Safe Areas */
+@media (screen and (display-mode: fullscreen)) {
+    .app-container {
+        padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+}
+
+/* Reduced Motion Preference */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    #cyber-canvas,
+    .scanlines,
+    .particle {
+        display: none;
+    }
+}
+
+/* Print Styles */
+@media print {
+    #cyber-canvas,
+    .scanlines,
+    .particle,
+    .theme-toggle {
+        display: none !important;
+    }
+    body {
+        background: white !important;
+        color: black !important;
+    }
+}

@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Sidhu MooseWala — BlackMafia Tribute</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Orbitron:wght@400;500;600;700;800;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ═══════════════════════════════════════════════════════════════
+           ROOT VARIABLES — PARROT OS CYBERPUNK THEME
+        ═══════════════════════════════════════════════════════════════ */
+        :root {
+            --bg-primary: #050505;
+            --bg-secondary: #0a0a0a;
+            --bg-card: rgba(10, 10, 10, 0.85);
+            --bg-glass: rgba(15, 15, 15, 0.75);
+            --bg-glass-light: rgba(255, 255, 255, 0.04);
+            --text-primary: #e8e8e8;
+            --text-secondary: #888888;
+            --accent-green: #00ff41;
+            --accent-cyan: #00d4ff;
+            --accent-purple: #b829dd;
+            --accent-red: #ff2a2a;
+            --accent-gold: #ffd700;
+            --border-glow: rgba(0, 255, 65, 0.25);
+            --border-cyan: rgba(0, 212, 255, 0.25);
+            --shadow-glow: 0 0 30px rgba(0, 255, 65, 0.12);
+            --shadow-cyan: 0 0 30px rgba(0, 212, 255, 0.12);
+            --font-display: 'Orbitron', sans-serif;
+            --font-mono: 'Share Tech Mono', monospace;
+            --font-body: 'Rajdhani', sans-serif;
+            --font-bio: 'Anonymous Pro', monospace;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.light-theme {
+            --bg-primary: #f0f2f5;
+            --bg-secondary: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.9);
+            --bg-glass: rgba(255, 255, 255, 0.85);
+            --bg-glass-light: rgba(0, 0, 0, 0.04);
+            --text-primary: #111111;
+            --text-secondary: #555555;
+            --accent-green: #008f11;
+            --accent-cyan: #0077b6;
+            --accent-purple: #7b2cbf;
+            --accent-red: #c41e3a;
+            --accent-gold: #b8860b;
+            --border-glow: rgba(0, 143, 17, 0.25);
+            --border-cyan: rgba(0, 119, 182, 0.25);
+            --shadow-glow: 0 0 30px rgba(0, 143, 17, 0.12);
+            --shadow-cyan: 0 0 30px rgba(0, 119, 182, 0.12);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           RESET & BASE
+        ═══════════════════════════════════════════════════════════════ */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-x: hidden;
+            transition: var(--transition);
+            position: relative;
+            line-height: 1.6;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           CYBER BACKGROUND CANVAS
+        ═══════════════════════════════════════════════════════════════ */
+        #cyber-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; pointer-events: none; opacity: 0.5;
+        }
+        body.light-theme #cyber-canvas { opacity: 0.25; }
+
+        /* ═══════════════════════════════════════════════════════════════
+           SCANLINE & GRID OVERLAY
+        ═══════════════════════════════════════════════════════════════ */
+        .scanlines {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                0deg, transparent, transparent 2px,
+                rgba(0, 255, 65, 0.025) 2px, rgba(0, 255, 65, 0.025) 4px
+            );
+            pointer-events: none; z-index: 1;
+            animation: scanlineMove 10s linear infinite;
+        }
+        body.light-theme .scanlines {
+            background: repeating-linear-gradient(
+                0deg, transparent, transparent 2px,
+                rgba(0, 0, 0, 0.015) 2px, rgba(0, 0, 0, 0.015) 4px
+            );
+        }
+        @keyframes scanlineMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 120px; }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           FLOATING PARTICLES
+        ═══════════════════════════════════════════════════════════════ */
+        .particle {
+            position: fixed; width: 3px; height: 3px;
+            background: var(--accent-green); border-radius: 50%;
+            pointer-events: none; z-index: 1; opacity: 0.5;
+            animation: floatParticle 20s infinite ease-in-out;
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+        @keyframes floatParticle {
+            0%, 100% { transform: translateY(110vh) scale(0); opacity: 0; }
+            10% { opacity: 0.5; }
+            50% { transform: translateY(-10vh) scale(1); }
+            90% { opacity: 0.5; }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           THEME TOGGLE
+        ═══════════════════════════════════════════════════════════════ */
+        .theme-toggle {
+            position: fixed; top: 20px; right: 20px; z-index: 1000;
+            background: var(--bg-glass); backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow); border-radius: 50px;
+            padding: 10px 22px; cursor: pointer; font-family: var(--font-mono);
+            font-size: 0.8rem; color: var(--accent-green);
+            display: flex; align-items: center; gap: 10px;
+            transition: var(--transition); box-shadow: var(--shadow-glow);
+            user-select: none; -webkit-tap-highlight-color: transparent;
+        }
+        .theme-toggle:hover {
+            transform: scale(1.08); box-shadow: 0 0 40px var(--border-glow);
+            border-color: var(--accent-green);
+        }
+        .theme-toggle svg { width: 18px; height: 18px; transition: transform 0.6s ease; }
+        body.light-theme .theme-toggle svg { transform: rotate(180deg); }
+
+        /* ═══════════════════════════════════════════════════════════════
+           GLITCH TEXT
+        ═══════════════════════════════════════════════════════════════ */
+        .glitch {
+            position: relative; display: inline-block;
+        }
+        .glitch::before, .glitch::after {
+            content: attr(data-text); position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%; opacity: 0.85;
+        }
+        .glitch::before {
+            color: var(--accent-cyan);
+            animation: glitch-1 2.5s infinite linear alternate-reverse;
+            clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%);
+        }
+        .glitch::after {
+            color: var(--accent-green);
+            animation: glitch-2 3.5s infinite linear alternate-reverse;
+            clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+        }
+        @keyframes glitch-1 {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-4px, 3px); }
+            40% { transform: translate(-4px, -3px); }
+            60% { transform: translate(4px, 3px); }
+            80% { transform: translate(4px, -3px); }
+        }
+        @keyframes glitch-2 {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(4px, -3px); }
+            40% { transform: translate(4px, 3px); }
+            60% { transform: translate(-4px, -3px); }
+            80% { transform: translate(-4px, 3px); }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           APP CONTAINER
+        ═══════════════════════════════════════════════════════════════ */
+        .app-container {
+            position: relative; z-index: 2;
+            display: flex; flex-direction: column;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right)
+                     env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           TOP SOCIAL FLOATERS (YT & INSTAGRAM)
+        ═══════════════════════════════════════════════════════════════ */
+        .top-social-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 25px; position: relative; z-index: 10;
+            max-width: 1400px; margin: 0 auto; width: 100%;
+        }
+        .top-social-img {
+            width: 55px; height: 55px; border-radius: 14px;
+            object-fit: cover; border: 2px solid var(--border-glow);
+            box-shadow: var(--shadow-glow); cursor: pointer;
+            transition: var(--transition); background: var(--bg-glass);
+            backdrop-filter: blur(8px);
+        }
+        .top-social-img:hover {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 0 30px var(--accent-green);
+            border-color: var(--accent-green);
+        }
+        @media (max-width: 480px) {
+            .top-social-img { width: 40px; height: 40px; border-radius: 10px; }
+            .top-social-bar { padding: 10px 15px; }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           HERO HEADER WITH LEVELS IMAGE
+        ═══════════════════════════════════════════════════════════════ */
+        .hero {
+            text-align: center; padding: 20px 20px 40px;
+            position: relative; overflow: hidden;
+        }
+        .hero-image-wrapper {
+            position: relative; display: inline-block; margin-bottom: 20px;
+        }
+        .hero-image {
+            width: 220px; height: 220px; border-radius: 50%;
+            object-fit: cover; border: 3px solid var(--accent-green);
+            box-shadow: 0 0 40px var(--border-glow), 0 0 80px rgba(0,255,65,0.1);
+            transition: var(--transition); position: relative; z-index: 2;
+        }
+        .hero-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 60px var(--border-glow), 0 0 120px rgba(0,255,65,0.2);
+        }
+        .hero-image-ring {
+            position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px;
+            border-radius: 50%; border: 2px dashed var(--accent-cyan);
+            animation: spinRing 20s linear infinite; z-index: 1; opacity: 0.6;
+        }
+        @keyframes spinRing {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 900; letter-spacing: 6px;
+            text-transform: uppercase; line-height: 1.1; margin-bottom: 8px;
+        }
+        .hero h1 .highlight {
+            color: var(--accent-green);
+            text-shadow: 0 0 30px var(--border-glow);
+        }
+        .hero .subtitle {
+            font-family: var(--font-mono);
+            font-size: clamp(0.8rem, 2vw, 1.1rem);
+            color: var(--text-secondary); letter-spacing: 4px;
+            text-transform: uppercase; margin-bottom: 20px;
+        }
+        .hero-divider {
+            width: 120px; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-green), var(--accent-cyan), transparent);
+            margin: 0 auto; position: relative;
+        }
+        .hero-divider::after {
+            content: ''; position: absolute; top: -4px; left: 50%;
+            transform: translateX(-50%); width: 10px; height: 10px;
+            background: var(--accent-green); border-radius: 50%;
+            box-shadow: 0 0 15px var(--accent-green);
+        }
+        .header-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--bg-glass-light); border: 1px solid var(--border-glow);
+            border-radius: 50px; padding: 6px 18px; margin-bottom: 20px;
+            font-family: var(--font-mono); font-size: 0.7rem;
+            color: var(--accent-green); letter-spacing: 3px;
+            text-transform: uppercase; animation: pulseGlow 2.5s ease-in-out infinite;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 5px var(--border-glow); }
+            50% { box-shadow: 0 0 25px var(--border-glow), 0 0 50px var(--border-glow); }
+        }
+        .header-badge .dot {
+            width: 7px; height: 7px; background: var(--accent-green);
+            border-radius: 50%; animation: blink 1.2s step-end infinite;
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        @media (max-width: 480px) {
+            .hero-image { width: 150px; height: 150px; }
+            .hero { padding: 10px 15px 30px; }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           SECTION WRAPPER
+        ═══════════════════════════════════════════════════════════════ */
+        .section {
+            width: 100%; max-width: 1100px; margin: 0 auto;
+            padding: 40px 20px; position: relative;
+        }
+        .section-title {
+            font-family: var(--font-display); font-size: clamp(1.3rem, 3.5vw, 2rem);
+            font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+            margin-bottom: 25px; display: flex; align-items: center; gap: 15px;
+            color: var(--accent-cyan);
+        }
+        .section-title::before {
+            content: '▶'; font-size: 0.7rem; color: var(--accent-green);
+            animation: blink 1.5s step-end infinite;
+        }
+        .section-title::after {
+            content: ''; flex: 1; height: 1px;
+            background: linear-gradient(90deg, var(--border-cyan), transparent);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           MEMORIAL BOX — DEATH INFO (Anonymous Pro)
+        ═══════════════════════════════════════════════════════════════ */
+        .memorial-box {
+            background: linear-gradient(135deg, rgba(255,42,42,0.08), rgba(184,41,221,0.08));
+            border: 1px solid rgba(255,42,42,0.3); border-radius: 16px;
+            padding: 25px; margin-bottom: 30px; position: relative; overflow: hidden;
+            font-family: var(--font-bio);
+            box-shadow: 0 0 30px rgba(255,42,42,0.1), inset 0 1px 0 rgba(255,255,255,0.03);
+        }
+        .memorial-box::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--accent-red), var(--accent-purple), var(--accent-red));
+            animation: scanLine 4s linear infinite;
+        }
+        .memorial-label {
+            font-family: var(--font-mono); font-size: 0.65rem;
+            color: var(--accent-red); letter-spacing: 4px;
+            text-transform: uppercase; margin-bottom: 12px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .memorial-label::before { content: '◆'; font-size: 0.5rem; }
+        .memorial-box h3 {
+            font-family: var(--font-bio); font-size: 1.1rem;
+            color: var(--text-primary); margin-bottom: 10px; font-weight: 700;
+        }
+        .memorial-box p {
+            font-family: var(--font-bio); font-size: 0.9rem;
+            color: var(--text-secondary); line-height: 1.7;
+        }
+        .memorial-box .date-highlight {
+            color: var(--accent-red); font-weight: 700;
+            text-shadow: 0 0 10px rgba(255,42,42,0.3);
+        }
+        .memorial-box .place-highlight {
+            color: var(--accent-gold); font-weight: 700;
+        }
+        @keyframes scanLine {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           BIOGRAPHY TEXT (Anonymous Pro)
+        ═══════════════════════════════════════════════════════════════ */
+        .bio-text {
+            font-family: var(--font-bio); font-size: 0.95rem;
+            color: var(--text-secondary); line-height: 1.85;
+            text-align: justify; margin-bottom: 20px;
+        }
+        .bio-text strong {
+            color: var(--accent-green); font-weight: 700;
+        }
+        .bio-text em {
+            color: var(--accent-cyan); font-style: italic;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           TIMELINE / ROADMAP
+        ═══════════════════════════════════════════════════════════════ */
+        .timeline {
+            position: relative; padding-left: 30px; margin: 30px 0;
+        }
+        .timeline::before {
+            content: ''; position: absolute; left: 8px; top: 0; bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent-green), var(--accent-cyan), var(--accent-purple));
+            box-shadow: 0 0 10px var(--border-glow);
+        }
+        .timeline-item {
+            position: relative; margin-bottom: 28px; padding-left: 25px;
+            opacity: 0; transform: translateX(-20px);
+            animation: slideIn 0.6s ease forwards;
+        }
+        .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.4s; }
+        .timeline-item:nth-child(5) { animation-delay: 0.5s; }
+        .timeline-item:nth-child(6) { animation-delay: 0.6s; }
+        .timeline-item:nth-child(7) { animation-delay: 0.7s; }
+        .timeline-item:nth-child(8) { animation-delay: 0.8s; }
+        @keyframes slideIn {
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .timeline-dot {
+            position: absolute; left: -29px; top: 4px;
+            width: 14px; height: 14px; border-radius: 50%;
+            background: var(--bg-primary);
+            border: 2px solid var(--accent-green);
+            box-shadow: 0 0 10px var(--accent-green);
+            z-index: 2;
+        }
+        .timeline-item.legacy .timeline-dot {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 15px var(--accent-gold);
+            animation: pulseDot 2s ease-in-out infinite;
+        }
+        .timeline-item.death .timeline-dot {
+            border-color: var(--accent-red);
+            box-shadow: 0 0 15px var(--accent-red);
+        }
+        @keyframes pulseDot {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+        .timeline-year {
+            font-family: var(--font-mono); font-size: 0.75rem;
+            color: var(--accent-green); letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+        .timeline-title {
+            font-family: var(--font-display); font-size: 1rem;
+            font-weight: 600; color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .timeline-desc {
+            font-family: var(--font-bio); font-size: 0.85rem;
+            color: var(--text-secondary); line-height: 1.6;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           MOOSETAPE SECTION
+        ═══════════════════════════════════════════════════════════════ */
+        .moosetape-section {
+            background: var(--bg-card); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glow); border-radius: 20px;
+            padding: 30px; margin: 30px auto;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.4), 0 0 60px rgba(0,255,65,0.05);
+            position: relative; overflow: hidden;
+            max-width: 1100px; width: calc(100% - 40px);
+        }
+        .moosetape-section::before {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+            animation: scanLine 5s linear infinite;
+        }
+        .moosetape-grid {
+            display: grid; grid-template-columns: 1fr 1.5fr;
+            gap: 30px; align-items: center;
+        }
+        .moosetape-img {
+            width: 100%; border-radius: 14px;
+            border: 2px solid var(--border-glow);
+            box-shadow: 0 0 30px rgba(0,255,65,0.1);
+            transition: var(--transition);
+        }
+        .moosetape-img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 50px rgba(0,255,65,0.2);
+        }
+        .moosetape-info h3 {
+            font-family: var(--font-display); font-size: 1.4rem;
+            color: var(--accent-gold); margin-bottom: 12px;
+            text-shadow: 0 0 20px rgba(255,215,0,0.2);
+        }
+        .moosetape-info p {
+            font-family: var(--font-bio); font-size: 0.9rem;
+            color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px;
+        }
+        .moosetape-stats {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 15px;
+        }
+        .stat-box {
+            background: var(--bg-glass-light); border: 1px solid var(--border-glow);
+            border-radius: 10px; padding: 12px; text-align: center;
+            transition: var(--transition);
+        }
+        .stat-box:hover {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 20px var(--border-glow);
+            transform: translateY(-3px);
+        }
+        .stat-number {
+            font-family: var(--font-display); font-size: 1.3rem;
+            color: var(--accent-green); font-weight: 700;
+        }
+        .stat-label {
+            font-family: var(--font-mono); font-size: 0.65rem;
+            color: var(--text-secondary); letter-spacing: 1px;
+            text-transform: uppercase; margin-top: 4px;
+        }
+        @media (max-width: 768px) {
+            .moosetape-grid { grid-template-columns: 1fr; }
+            .moosetape-section { padding: 20px; }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           SOCIAL BUTTONS
+        ═══════════════════════════════════════════════════════════════ */
+        .social-section {
+            text-align: center; padding: 40px 20px;
+        }
+        .social-grid {
+            display: flex; justify-content: center; gap: 25px;
+            flex-wrap: wrap; margin-top: 20px;
+        }
+        .social-btn {
+            position: relative; display: inline-flex; align-items: center;
+            gap: 12px; padding: 14px 32px; border-radius: 50px;
+            font-family: var(--font-mono); font-size: 0.9rem;
+            text-decoration: none; color: #fff; overflow: hidden;
+            border: 1px solid transparent; transition: var(--transition);
+            cursor: pointer; z-index: 1;
+        }
+        .social-btn::before {
+            content: ''; position: absolute; inset: 0; z-index: -1;
+            border-radius: 50px; opacity: 0.15; transition: var(--transition);
+        }
+        .social-btn::after {
+            content: ''; position: absolute; inset: -2px; z-index: -2;
+            border-radius: 52px; opacity: 0; transition: var(--transition);
+            filter: blur(12px);
+        }
+        .social-btn:hover::before { opacity: 0.25; }
+        .social-btn:hover::after { opacity: 0.6; }
+        .social-btn:hover { transform: translateY(-4px) scale(1.05); }
+        .social-btn:active { transform: scale(0.95); }
+        .social-btn svg { width: 22px; height: 22px; fill: currentColor; }
+
+        .btn-youtube {
+            background: linear-gradient(135deg, rgba(255,0,0,0.15), rgba(255,0,0,0.05));
+            border-color: rgba(255,0,0,0.4); color: #ff4444;
+        }
+        .btn-youtube::before { background: #ff0000; }
+        .btn-youtube::after { background: #ff0000; }
+        .btn-youtube:hover { box-shadow: 0 8px 30px rgba(255,0,0,0.3); border-color: #ff0000; }
+
+        .btn-instagram {
+            background: linear-gradient(135deg, rgba(225,48,108,0.15), rgba(88,81,219,0.05));
+            border-color: rgba(225,48,108,0.4); color: #e1306c;
+        }
+        .btn-instagram::before { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .btn-instagram::after { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .btn-instagram:hover { box-shadow: 0 8px 30px rgba(225,48,108,0.3); border-color: #e1306c; }
+
+        .btn-twitter {
+            background: linear-gradient(135deg, rgba(29,161,242,0.15), rgba(29,161,242,0.05));
+            border-color: rgba(29,161,242,0.4); color: #1da1f2;
+        }
+        .btn-twitter::before { background: #1da1f2; }
+        .btn-twitter::after { background: #1da1f2; }
+        .btn-twitter:hover { box-shadow: 0 8px 30px rgba(29,161,242,0.3); border-color: #1da1f2; }
+
+        /* Ripple Effect */
+        .ripple {
+            position: absolute; border-radius: 50%; transform: scale(0);
+            animation: rippleAnim 0.6s linear; background: rgba(255,255,255,0.3);
+            pointer-events: none;
+        }
+        @keyframes rippleAnim {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           SPOTIFY SECTION — CYBERPUNK
+        ═══════════════════════════════════════════════════════════════ */
+        .spotify-section {
+            padding: 40px 20px; width: 100%; max-width: 1200px; margin: 0 auto;
+        }
+        .spotify-card {
+            background: var(--bg-card); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glow); border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.4),
+                        0 0 80px rgba(0,255,65,0.06),
+                        inset 0 1px 0 rgba(255,255,255,0.04);
+            transition: var(--transition); position: relative; overflow: hidden;
+        }
+        .spotify-card::before {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-green), var(--accent-cyan), transparent);
+            animation: scanLine 3s linear infinite;
+        }
+        .spotify-card:hover {
+            box-shadow: 0 8px 40px rgba(0,0,0,0.5),
+                        0 0 100px rgba(0,255,65,0.1),
+                        inset 0 1px 0 rgba(255,255,255,0.06);
+            border-color: rgba(0,255,65,0.5);
+        }
+        .spotify-label {
+            font-family: var(--font-mono); font-size: 0.75rem;
+            color: var(--accent-green); letter-spacing: 4px;
+            text-transform: uppercase; margin-bottom: 15px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .spotify-label::before {
+            content: '▶'; font-size: 0.6rem;
+            animation: blink 1s step-end infinite;
+        }
+        .spotify-frame-container {
+            width: 100%; border-radius: 12px; overflow: hidden;
+            position: relative; background: #000;
+            border: 1px solid rgba(0,255,65,0.15);
+            box-shadow: inset 0 0 30px rgba(0,255,65,0.05);
+        }
+        .spotify-frame-container::after {
+            content: ''; position: absolute; inset: 0; border-radius: 12px;
+            box-shadow: inset 0 0 30px rgba(0,255,65,0.08);
+            pointer-events: none; z-index: 10;
+        }
+        .spotify-frame {
+            width: 100%; border: none; display: block;
+            min-height: 500px; height: 60vh; height: 60dvh;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           QUOTE SECTION
+        ═══════════════════════════════════════════════════════════════ */
+        .quote-section {
+            text-align: center; padding: 60px 20px 40px;
+            position: relative;
+        }
+        .quote-box {
+            max-width: 800px; margin: 0 auto;
+            background: linear-gradient(135deg, var(--bg-glass), var(--bg-glass-light));
+            backdrop-filter: blur(16px); border: 1px solid var(--border-glow);
+            border-radius: 20px; padding: 40px 30px;
+            box-shadow: 0 0 40px rgba(0,255,65,0.08);
+            position: relative; overflow: hidden;
+        }
+        .quote-box::before, .quote-box::after {
+            font-family: Georgia, serif; font-size: 4rem;
+            color: var(--accent-green); opacity: 0.3;
+            position: absolute; line-height: 1;
+        }
+        .quote-box::before { content: '"'; top: 10px; left: 20px; }
+        .quote-box::after { content: '"'; bottom: 0px; right: 20px; }
+        .quote-text {
+            font-family: var(--font-bio); font-size: clamp(1rem, 2.5vw, 1.4rem);
+            color: var(--text-primary); line-height: 1.8; font-style: italic;
+            position: relative; z-index: 1;
+        }
+        .quote-author {
+            font-family: var(--font-display); font-size: 0.9rem;
+            color: var(--accent-green); margin-top: 20px;
+            letter-spacing: 3px; text-transform: uppercase;
+        }
+        .quote-line {
+            width: 60px; height: 2px;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+            margin: 15px auto 0; border-radius: 2px;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           FOOTER
+        ═══════════════════════════════════════════════════════════════ */
+        .footer {
+            text-align: center; padding: 30px 20px 40px;
+            font-family: var(--font-mono); font-size: 0.75rem;
+            color: var(--text-secondary); letter-spacing: 2px;
+        }
+        .footer .heart {
+            color: var(--accent-red); display: inline-block;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.25); }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           SCROLLBAR
+        ═══════════════════════════════════════════════════════════════ */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-green); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-cyan); }
+
+        /* ═══════════════════════════════════════════════════════════════
+           RESPONSIVE
+        ═══════════════════════════════════════════════════════════════ */
+        @media (min-width: 1920px) {
+            .spotify-frame { height: 65vh; min-height: 600px; }
+            .section { max-width: 1200px; }
+        }
+        @media (min-width: 1200px) and (max-width: 1919px) {
+            .spotify-frame { height: 60vh; min-height: 500px; }
+        }
+        @media (min-width: 1024px) and (max-width: 1199px) {
+            .spotify-frame { height: 55vh; min-height: 450px; }
+        }
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .spotify-frame { height: 50vh; min-height: 400px; }
+        }
+        @media (min-width: 481px) and (max-width: 767px) {
+            .theme-toggle { top: 15px; right: 15px; padding: 8px 16px; font-size: 0.75rem; }
+            .hero h1 { font-size: 1.8rem; }
+            .spotify-frame { height: 55vh; min-height: 350px; }
+            .social-btn { padding: 12px 24px; font-size: 0.8rem; }
+        }
+        @media (max-width: 480px) {
+            .theme-toggle { top: 10px; right: 10px; padding: 6px 12px; font-size: 0.7rem; gap: 6px; }
+            .theme-toggle svg { width: 14px; height: 14px; }
+            .hero-image { width: 140px; height: 140px; }
+            .hero h1 { font-size: 1.5rem; letter-spacing: 2px; }
+            .header-badge { font-size: 0.6rem; padding: 5px 12px; }
+            .section { padding: 25px 15px; }
+            .section-title { font-size: 1.1rem; }
+            .spotify-card { padding: 15px; }
+            .spotify-frame { height: 50vh; min-height: 300px; }
+            .social-grid { gap: 12px; }
+            .social-btn { padding: 10px 20px; font-size: 0.8rem; gap: 8px; }
+            .moosetape-section { padding: 18px; margin: 20px auto; width: calc(100% - 30px); }
+            .moosetape-stats { grid-template-columns: 1fr; }
+            .quote-box { padding: 25px 20px; }
+            .quote-box::before, .quote-box::after { font-size: 2.5rem; }
+            .timeline { padding-left: 20px; }
+            .timeline-dot { left: -24px; width: 12px; height: 12px; }
+        }
+        @media (max-width: 320px), (max-height: 320px) {
+            .theme-toggle, .top-social-bar, .header-badge { display: none; }
+            .hero-image { width: 100px; height: 100px; }
+            .hero h1 { font-size: 1rem; }
+            .spotify-frame { height: 45vh; min-height: 200px; }
+        }
+        @media (max-height: 500px) and (orientation: landscape) {
+            .hero { padding: 10px 15px 20px; }
+            .hero-image { width: 120px; height: 120px; }
+            .spotify-frame { height: 70vh; min-height: 250px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            #cyber-canvas, .scanlines, .particle { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="cyber-canvas"></canvas>
+    <div class="scanlines"></div>
+    <div id="particles"></div>
+
+    <!-- THEME TOGGLE -->
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <span>Theme</span>
+    </button>
+
+    <div class="app-container">
+        <!-- TOP SOCIAL FLOATERS -->
+        <div class="top-social-bar">
+            <a href="https://www.youtube.com/@SidhuMooseWala" target="_blank" rel="noopener">
+                <img src="https://raw.githubusercontent.com/PrinceRanga120/SMW-Spotify/main/Images/YT.jpg" alt="YouTube" class="top-social-img" title="Sidhu MooseWala YouTube">
+            </a>
+            <a href="https://www.instagram.com/sidhu_moosewala/" target="_blank" rel="noopener">
+                <img src="https://raw.githubusercontent.com/PrinceRanga120/SMW-Spotify/main/Images/Instagram.jpg" alt="Instagram" class="top-social-img" title="Sidhu MooseWala Instagram">
+            </a>
+        </div>
+
+        <!-- HERO HEADER -->
+        <header class="hero">
+            <div class="header-badge">
+                <span class="dot"></span>
+                BlackMafia Music Hub
+            </div>
+            <div class="hero-image-wrapper">
+                <div class="hero-image-ring"></div>
+                <img src="https://raw.githubusercontent.com/PrinceRanga120/SMW-Spotify/main/Images/Levels%20ORG.jpg" alt="Sidhu MooseWala - Levels" class="hero-image">
+            </div>
+            <h1>
+                <span class="glitch" data-text="SIDHU">SIDHU</span>
+                <span class="highlight">MOOSEWALA</span>
+            </h1>
+            <p class="subtitle">A Legendary Tribute — 1993 / ∞</p>
+            <div class="hero-divider"></div>
+        </header>
+
+        <!-- BIOGRAPHY SECTION -->
+        <section class="section">
+            <h2 class="section-title">Life & Legacy</h2>
+
+            <!-- Memorial Box -->
+            <div class="memorial-box">
+                <div class="memorial-label">In Memoriam</div>
+                <h3>Shubhdeep Singh Sidhu (Sidhu MooseWala)</h3>
+                <p>
+                    <strong>Born:</strong> <span class="date-highlight">June 11, 1993</span> — 
+                    <span class="place-highlight">Moosa, Mansa District, Punjab, India</span><br>
+                    <strong>Died:</strong> <span class="date-highlight">May 29, 2022</span> (aged 28) — 
+                    <span class="place-highlight">Jawaharke, Mansa District, Punjab, India</span><br><br>
+                    <strong>Cause of Death:</strong> <span class="date-highlight">Assassination by gunshot</span>. 
+                    On the evening of May 29, 2022, Sidhu MooseWala was shot dead by unidentified assailants 
+                    while driving his car in Jawaharke village. The attack was linked to inter-gang rivalry. 
+                    His death sent shockwaves across the globe, triggering an outpouring of grief from millions 
+                    of fans, fellow artists, and political figures. He remains immortal in the hearts of Punjabis worldwide.
+                </p>
+            </div>
+
+            <!-- Full Biography -->
+            <div class="bio-text">
+                <strong>Sidhu MooseWala</strong> — born <em>Shubhdeep Singh Sidhu</em> — was not merely a singer; 
+                he was a cultural earthquake that redefined Punjabi music forever. Hailing from the small village 
+                of <strong>Moosa</strong> in Mansa, Punjab, he grew up in a humble farming family. His father, 
+                <strong>Balkaur Singh</strong>, and mother, <strong>Charan Kaur</strong>, provided a grounded 
+                upbringing that would later reflect deeply in his lyrics rooted in village life, pride, and raw emotion.
+            </div>
+            <div class="bio-text">
+                After completing his schooling in Mansa, Sidhu moved to <strong>Ludhiana</strong> for higher studies 
+                and eventually pursued <strong>Electrical Engineering</strong> at the Guru Nanak Dev Engineering College. 
+                It was during his college years that the spark of music ignited. He began writing lyrics as 
+                <em>"Shubhdeep"</em> and adopted the stage name <strong>"MooseWala"</strong> as a tribute to his native village.
+            </div>
+            <div class="bio-text">
+                His breakthrough came with <strong>"So High"</strong> (2017), a track produced by <em>Byg Byrd</em>, 
+                which exploded across Punjab and the diaspora. The song's gritty realism, combined with Sidhu's 
+                deep baritone voice, created a new genre — <em>"Sidhu MooseWala Music."</em> He followed this 
+                with a relentless stream of hits: <strong>"Issa Jatt," "Tochan," "Famous," "Dollar," 
+                "Legend," "Old Skool," "Same Beef," "295," "The Last Ride,"</strong> and countless others.
+            </div>
+            <div class="bio-text">
+                Sidhu wasn't just a musician; he was a <strong>poet, actor, politician, and voice of the youth.</strong> 
+                He made his acting debut in <strong>"Yes I Am Student"</strong> and later entered politics, 
+                joining the <strong>Indian National Congress</strong> and contesting the 2022 Punjab Legislative 
+                Assembly election from Mansa. Though he lost, his influence on youth politics was undeniable.
+            </div>
+            <div class="bio-text">
+                His album <strong>"Moosetape"</strong> (2021) shattered every streaming record in Indian music history. 
+                With 32 tracks, it became the most-streamed album by an Indian artist on Spotify in the first 24 hours. 
+                His posthumous releases continue to dominate charts, proving that legends never die — they simply 
+                become <em>timeless</em>.
+            </div>
+        </section>
+
+        <!-- TIMELINE / ROADMAP -->
+        <section class="section">
+            <h2 class="section-title">Life Timeline</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-year">1993</div>
+                    <div class="timeline-title">Born in Moosa</div>
+                    <div class="timeline-desc">Shubhdeep Singh Sidhu born on June 11 in Moosa village, Mansa, Punjab. Raised in a Sikh Jatt farming family.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-year">2016</div>
+                    <div class="timeline-title">Engineering & Early Lyrics</div>
+                    <div class="timeline-desc">Completed Electrical Engineering from GNDEC, Ludhiana. Started writing lyrics under the name "Shubhdeep."</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-year">2017</div>
+                    <div class="timeline-title">"So High" — The Explosion</div>
+                    <div class="timeline-desc">Released "So High" with Byg Byrd. The track went viral overnight, establishing the MooseWala sound.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-year">2018</div>
+                    <div class="timeline-title">PBX 1 & Stardom</div>
+                    <div class="timeline-desc">Debut album <em>PBX 1</em> released. Hits like "Famous" and "Dollar" dominated charts. Won Best Lyricist at Brit Asia TV Music Awards.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-year">2019–2020</div>
+                    <div class="timeline-title">The Golden Era</div>
+                    <div class="timeline-desc">Released "Old Skool," "Tibeyan Da Putt," "Sanju," "Bambiha Bole." Collaborated with Bohemia, Divine, and international artists.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-year">2021</div>
+                    <div class="timeline-title">Moosetape — History Made</div>
+                    <div class="timeline-desc">Dropped <em>Moosetape</em> with 32 tracks. Broke Spotify India records. Entered Billboard Global 200. Became the voice of a generation.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-year">2022</div>
+                    <div class="timeline-title">Politics & The Final Chapter</div>
+                    <div class="timeline-desc">Joined Congress, contested Mansa election. Released "The Last Ride" — hauntingly prophetic. Passed away on May 29, 2022.</div>
+                </div>
+                <div class="timeline-item legacy">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-year">2023–∞</div>
+                    <div class="timeline-title">Immortal Legacy</div>
+                    <div class="timeline-desc">Posthumous albums <em>Sidhu's Shadow</em> and singles continue to break records. Statues erected. Streets named after him. Forever 295.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SOCIAL BUTTONS -->
+        <section class="social-section">
+            <h2 class="section-title">Connect With The Legend</h2>
+            <div class="social-grid">
+                <a href="https://www.youtube.com/@SidhuMooseWala" target="_blank" rel="noopener" class="social-btn btn-youtube" onclick="createRipple(event, this)">
+                    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    <span>YouTube</span>
+                </a>
+                <a href="https://www.instagram.com/sidhu_moosewala/" target="_blank" rel="noopener" class="social-btn btn-instagram" onclick="createRipple(event, this)">
+                    <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+                    <span>Instagram</span>
+                </a>
+                <a href="https://x.com/iSidhuMooseWala" target="_blank" rel="noopener" class="social-btn btn-twitter" onclick="createRipple(event, this)">
+                    <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    <span>X / Twitter</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- SPOTIFY SECTION -->
+        <section class="spotify-section">
+            <div class="spotify-card">
+                <div class="spotify-label">Now Playing — Official Spotify Playlist</div>
+                <div class="spotify-frame-container">
+                    <iframe 
+                        class="spotify-frame" 
+                        src="https://open.spotify.com/embed/playlist/2IcaJbnjvZC3Xhf5m64nd5?utm_source=generator&theme=0"
+                        width="100%" frameborder="0" allowfullscreen=""
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- MOOSETAPE SECTION -->
+        <section class="moosetape-section">
+            <div class="moosetape-grid">
+                <div>
+                    <img src="https://raw.githubusercontent.com/PrinceRanga120/SMW-Spotify/main/Images/Moosetape%20Songs.png" alt="Moosetape Album" class="moosetape-img">
+                </div>
+                <div class="moosetape-info">
+                    <h3>MOOSETAPE — The Crown Jewel</h3>
+                    <p>
+                        Released on <strong>May 15, 2021</strong>, <em>Moosetape</em> is Sidhu MooseWala's magnum opus — 
+                        a 32-track masterpiece that redefined Punjabi music globally. Produced primarily by 
+                        <strong>The Kidd</strong> and <strong>Snappy</strong>, the album blends raw street narratives 
+                        with melodic depth, featuring no commercial compromises.
+                    </p>
+                    <p>
+                        The album debuted at <strong>#65 on Billboard Canadian Albums</strong> and shattered 
+                        streaming records, becoming the <strong>most-streamed album by an Indian artist on Spotify 
+                        in the first 24 hours</strong>. Tracks like <em>"295," "US," "Brown Shortie," 
+                        "Signed to God," "Burberry,"</em> and <em>"The Last Ride"</em> became anthems.
+                    </p>
+                    <div class="moosetape-stats">
+                        <div class="stat-box">
+                            <div class="stat-number">32</div>
+                            <div class="stat-label">Tracks</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">#1</div>
+                            <div class="stat-label">Spotify India Debut</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">500M+</div>
+                            <div class="stat-label">Streams (First Month)</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">Billboard</div>
+                            <div class="stat-label">Canadian Albums #65</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUOTE SECTION -->
+        <section class="quote-section">
+            <div class="quote-box">
+                <p class="quote-text">
+                    It's not about how hard you hit. It's about how hard you can get hit and keep moving forward. 
+                    That's how winning is done. We don't die, we multiply.
+                </p>
+                <div class="quote-line"></div>
+                <p class="quote-author">— Sidhu MooseWala</p>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <p>Made with <span class="heart">♥</span> by BlackMafia | Rest In Power Sidhu MooseWala | 1993 — ∞</p>
+        </footer>
+    </div>
+
+    <script>
+        // ─── THEME TOGGLE ───
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+            const isLight = document.body.classList.contains('light-theme');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        }
+        (function() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'light') document.body.classList.add('light-theme');
+        })();
+
+        // ─── RIPPLE EFFECT ───
+        function createRipple(e, btn) {
+            const circle = document.createElement('span');
+            const diameter = Math.max(btn.clientWidth, btn.clientHeight);
+            const radius = diameter / 2;
+            circle.style.width = circle.style.height = diameter + 'px';
+            circle.style.left = (e.clientX - btn.getBoundingClientRect().left - radius) + 'px';
+            circle.style.top = (e.clientY - btn.getBoundingClientRect().top - radius) + 'px';
+            circle.classList.add('ripple');
+            const existing = btn.getElementsByClassName('ripple')[0];
+            if (existing) existing.remove();
+            btn.appendChild(circle);
+        }
+
+        // ─── CYBER CANVAS ───
+        const canvas = document.getElementById('cyber-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles = [];
+        const COUNT = 70;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * width; this.y = Math.random() * height;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.4;
+                this.speedY = (Math.random() - 0.5) * 0.4;
+                this.opacity = Math.random() * 0.4 + 0.15;
+                this.color = Math.random() > 0.5 ? '#00ff41' : '#00d4ff';
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY;
+                if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) this.reset();
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color; ctx.globalAlpha = this.opacity;
+                ctx.fill(); ctx.globalAlpha = 1;
+            }
+        }
+        function init() {
+            particles = [];
+            for (let i = 0; i < COUNT; i++) particles.push(new Particle());
+        }
+        function connect() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 140) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = '#00ff41';
+                        ctx.globalAlpha = (1 - dist / 140) * 0.12;
+                        ctx.lineWidth = 0.4;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke(); ctx.globalAlpha = 1;
+                    }
+                }
+            }
+        }
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            connect();
+            requestAnimationFrame(animate);
+        }
+        resize(); init(); animate();
+        window.addEventListener('resize', () => { resize(); init(); });
+
+        // ─── DOM PARTICLES ───
+        const pContainer = document.getElementById('particles');
+        for (let i = 0; i < 12; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.animationDelay = Math.random() * 20 + 's';
+            p.style.animationDuration = (12 + Math.random() * 12) + 's';
+            pContainer.appendChild(p);
+        }
+
+        // ─── MOUSE PARALLAX ───
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 15;
+            const y = (e.clientY / window.innerHeight - 0.5) * 15;
+            document.querySelectorAll('.hero, .spotify-card, .moosetape-section, .quote-box').forEach(el => {
+                el.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+            });
+        });
+
+        // ─── INTERSECTION OBSERVER FOR ANIMATIONS ───
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.section, .moosetape-section, .quote-box').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
