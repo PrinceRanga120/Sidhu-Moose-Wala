@@ -749,9 +749,92 @@
             }
             #cyber-canvas, .scanlines, .particle { display: none; }
         }
+
+        /* ═══════════════════════════════════════════════════════════════
+           MUSIC TOGGLE BUTTON
+        ═══════════════════════════════════════════════════════════════ */
+        .music-toggle {
+            position: fixed; top: 20px; left: 20px; z-index: 1000;
+            background: var(--bg-glass); backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow); border-radius: 50px;
+            padding: 10px 20px; cursor: pointer; font-family: var(--font-mono);
+            font-size: 0.8rem; color: var(--accent-green);
+            display: flex; align-items: center; gap: 10px;
+            transition: var(--transition); box-shadow: var(--shadow-glow);
+            user-select: none; -webkit-tap-highlight-color: transparent;
+            overflow: hidden;
+        }
+        .music-toggle:hover {
+            transform: scale(1.08); box-shadow: 0 0 40px var(--border-glow);
+            border-color: var(--accent-green);
+        }
+        .music-toggle svg {
+            width: 18px; height: 18px; fill: currentColor;
+            transition: var(--transition);
+        }
+        .music-toggle .music-label {
+            font-size: 0.75rem; letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .music-toggle.muted {
+            border-color: rgba(255,255,255,0.1);
+            color: var(--text-secondary);
+            box-shadow: none;
+        }
+        .music-toggle.muted .music-wave span {
+            animation: none; height: 3px;
+        }
+        /* Music Wave Animation */
+        .music-wave {
+            display: flex; align-items: center; gap: 3px;
+            height: 16px;
+        }
+        .music-wave span {
+            width: 3px; background: currentColor; border-radius: 2px;
+            animation: musicWave 1s ease-in-out infinite;
+        }
+        .music-wave span:nth-child(1) { height: 6px; animation-delay: 0s; }
+        .music-wave span:nth-child(2) { height: 12px; animation-delay: 0.2s; }
+        .music-wave span:nth-child(3) { height: 8px; animation-delay: 0.4s; }
+        .music-wave span:nth-child(4) { height: 14px; animation-delay: 0.1s; }
+        @keyframes musicWave {
+            0%, 100% { transform: scaleY(0.5); opacity: 0.5; }
+            50% { transform: scaleY(1); opacity: 1; }
+        }
+        /* Responsive for music toggle */
+        @media (max-width: 480px) {
+            .music-toggle { top: 10px; left: 10px; padding: 6px 12px; font-size: 0.7rem; gap: 6px; }
+            .music-toggle svg { width: 14px; height: 14px; }
+            .music-toggle .music-label { display: none; }
+        }
+        @media (max-width: 320px), (max-height: 320px) {
+            .music-toggle { display: none; }
+        }
+
     </style>
 </head>
 <body>
+    <!-- BACKGROUND MUSIC — Levels by Sidhu MooseWala -->
+    <audio id="bg-music" loop preload="auto" style="display:none;">
+        <source src="https://raw.githubusercontent.com/PrinceRanga120/Sidhu-Moose-Wala/main/Levels%20-%20Sidhu%20Moose%20Wala.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- MUSIC TOGGLE BUTTON -->
+    <button id="music-toggle" class="music-toggle" onclick="toggleMusic()" aria-label="Toggle Music" title="Play/Pause Music">
+        <svg id="music-icon-play" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
+            <path d="M8 5v14l11-7z"/>
+        </svg>
+        <svg id="music-icon-pause" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+        </svg>
+        <span class="music-label">Levels</span>
+        <span class="music-wave">
+            <span></span><span></span><span></span><span></span>
+        </span>
+    </button>
+
     <canvas id="cyber-canvas"></canvas>
     <div class="scanlines"></div>
     <div id="particles"></div>
@@ -929,6 +1012,21 @@
                     <span>X / Twitter</span>
                 </a>
             </div>
+        </section>
+
+
+        <!-- MUSIC PLAYER LINK -->
+        <section class="social-section" style="padding-top:10px;">
+            <a href="music-player.html" class="social-btn" style="
+                background: linear-gradient(135deg, rgba(0,255,65,0.15), rgba(0,212,255,0.05));
+                border-color: rgba(0,255,65,0.4); color: var(--accent-green);
+                text-decoration: none; display: inline-flex;
+            ">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+                    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                </svg>
+                <span>🎵 Open Music Player</span>
+            </a>
         </section>
 
         <!-- SPOTIFY SECTION -->
@@ -1131,6 +1229,96 @@
             el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
             observer.observe(el);
         });
+
+        // ─── BACKGROUND MUSIC CONTROL ───
+        const bgMusic = document.getElementById('bg-music');
+        const musicToggle = document.getElementById('music-toggle');
+        const playIcon = document.getElementById('music-icon-play');
+        const pauseIcon = document.getElementById('music-icon-pause');
+        let isMusicPlaying = false;
+
+        // Audio Context for better background playback
+        let audioCtx = null;
+        try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        } catch(e) {}
+
+        // Try to autoplay on page load (may be blocked by browser policy)
+        window.addEventListener('load', () => {
+            bgMusic.volume = 0.4; // Set volume to 40%
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const playPromise = bgMusic.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    isMusicPlaying = true;
+                    updateMusicUI();
+                }).catch(() => {
+                    // Autoplay blocked - show play button state
+                    isMusicPlaying = false;
+                    updateMusicUI();
+                });
+            }
+        });
+
+        // Also try to play on first user interaction (click anywhere)
+        document.addEventListener('click', function initAudio() {
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            if (!isMusicPlaying && bgMusic.paused) {
+                bgMusic.play().then(() => {
+                    isMusicPlaying = true;
+                    updateMusicUI();
+                }).catch(() => {});
+            }
+            document.removeEventListener('click', initAudio);
+        }, { once: true });
+
+        // Additional: try to resume audio on any interaction
+        ['touchstart', 'keydown', 'scroll'].forEach(evt => {
+            document.addEventListener(evt, function resumeAudio() {
+                if (audioCtx && audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                if (isMusicPlaying && bgMusic.paused) {
+                    bgMusic.play().catch(() => {});
+                }
+            }, { once: true });
+        });
+
+        function toggleMusic() {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                isMusicPlaying = true;
+            } else {
+                bgMusic.pause();
+                isMusicPlaying = false;
+            }
+            updateMusicUI();
+        }
+
+        function updateMusicUI() {
+            if (isMusicPlaying && !bgMusic.paused) {
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+                musicToggle.classList.remove('muted');
+            } else {
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+                musicToggle.classList.add('muted');
+            }
+        }
+
+        // Keep music playing even when tab is switched (background audio)
+        // Note: Some browsers may throttle audio in background tabs
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && isMusicPlaying && bgMusic.paused) {
+                bgMusic.play().catch(() => {});
+            }
+        });
+
     </script>
 </body>
 </html>
